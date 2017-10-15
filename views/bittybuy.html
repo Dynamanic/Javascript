@@ -1,0 +1,217 @@
+
+<!doctype html>
+<html>
+<head>
+<title>Bitty Buy</title>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/css/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" href="bittybuy.css" />
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+</head>  
+<body>
+  <nav class="navbar navbar-expand-md navbar-light bg-light fixed-top">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" href="#">BittyBuy</a>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto pr-3">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Coins</a>
+          <div class="dropdown-menu" aria-labelledby="dropdown01">
+            <a class="dropdown-item" href="#">BTC-ETH</a>
+            <a class="dropdown-item" href="#">BTC-LSK</a>
+            <a class="dropdown-item" href="#">BTC-LTC</a>
+            <a class="dropdown-item" href="#">BTC-VTC</a>
+          </div>
+        </li>
+      </ul>
+      <form class="form-inline my-2 my-lg-0">
+        <input class="form-control mr-sm-2" type="text" placeholder="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      </form>
+    </div>
+  </nav>
+
+  <div class="container">
+    <!-- order book -->
+
+    <div class="d-flex flex-row mt-5">
+      <div class="p-2">
+        <h1 class="display-4">Order Books</h1></div>
+      <div class="p-2 mt-4">
+        <h3 class="text-success">
+          <span class="up" style="cursor: pointer">
+          <i class="fa fa-arrow-up"></i>
+        </span>
+        </h3>
+      </div>
+      <div class="p-2 mt-4">
+        <h3 class="text-warning">
+          <span class="down" style="cursor: pointer">
+            <i class="fa fa-arrow-down"></i>
+          </span>
+        </h3>
+      </div>
+      <div class="ml-auto p-2 mt-4">
+        <h3 class="text-danger">
+          <span class="cancel" style="cursor: pointer">Cancel
+            <i class="fa fa-times" aria-hidden="true"></i>
+          </span>
+        </h3>
+      </div>
+    </div>
+    <br>
+    <div class="d-flex flex-row">
+      <div class="col-md-6 col-sm-12 d-none d-md-block">
+        <table class="table table-sm" id="bid">
+          <thead>
+            <tr>
+              <th>Sum</th>
+              <th>Total</th>
+              <th>Size</th>
+              <th>Bid</th>
+            </tr>
+          </thead>
+          <tbody  class="bids_body">
+            
+          </tbody>
+        </table>
+        <br>
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="col-md-6 col-sm-12 d-none d-md-block">
+
+        <table class="table table-sm" id="asks">
+          <thead>
+            <tr>
+              <th>Ask</th>
+              <th>Size</th>
+              <th>Total</th>
+              <th>Sum</th>
+            </tr>
+          </thead>
+          <tbody class="asks_body">
+            
+          </tbody>
+        </table>
+        <br>
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+<script>
+$("document").ready(function(){
+
+
+
+$(".up").click(function(){
+alert("up");
+});
+
+
+$(".down").click(function(){
+alert("down");
+});
+
+$(".cancel").click(function(){
+alert("cancel");
+});
+
+$(".dropdown-item").click(function(){
+//alert($(this).text());
+ $(".bids_body").empty();
+ $(".asks_body").empty();
+
+$.ajax({
+				type : "GET",
+				contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+				url : "/books?coin=" + $(this).text(),
+				timeout : 600000,
+				success : function(data) {
+		
+						 $.each(data, function(key,val){
+							if(key=="result")
+							{
+							var x=0;
+							
+							 $.each(val, function(key2,val2){
+							var y=0;
+							x++;
+							 $.each(val2, function(key3,val3){
+							 y++;
+							 var quantity="";
+							 var rate="";
+							  $.each(val3, function(key4,val4){
+							  switch(key4){
+							  case "Quantity":
+							  quantity=val4;
+							  break;
+							   case "Rate":
+							  rate=val4;
+							  break;
+							  
+							  }
+							  
+							  });
+							  if(x>1){
+							  if(y <11){
+							 $(".asks_body").append("<tr><td>" + rate + "</td><td>" + quantity + "</td><td>0.0000</td><td>0.0000</td></tr>");
+							 }
+							 }
+							 else{
+							 if(y <11){
+							 $(".bids_body").append("<tr><td>0.0000</td><td>0.0000</td><td>" + quantity + "</td><td>" + rate + "</td></tr>");
+							 }
+							 }
+							 
+							 });
+							 
+							 
+							  });
+							}
+							
+						    });
+							    
+				},
+				error : function(jqXHR,textStatus,errorThrown) {
+					console.log(textStatus,errorThrown);
+				}
+			});
+
+
+});
+
+
+
+
+
+
+});
+
+</script>
+  </body>
+  </html>

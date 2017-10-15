@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.min.js"></script>
+  <title>Bitty Buy</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <link rel="stylesheet" href="styles.css">
+  <script src="http://localhost:8080/socket.io/socket.io.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datejs/1.0/date.min.js"></script>
+
+ 
+<style>
+
+
+
+</style>
+
+</head>
+
+<body class="">
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-md navbar-light bg-light fixed-top">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" href="#">BittyBuy</a>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto pr-3">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Coins</a>
+          <div class="dropdown-menu" aria-labelledby="dropdown01">
+            <a class="dropdown-item" href="#">BTC-XRP</a>
+            <a class="dropdown-item" href="#">BTC-XVG</a>
+            <a class="dropdown-item" href="#">BTC-NAV</a>
+            <a class="dropdown-item" href="#">BTC-VTC</a>
+           <a class="dropdown-item" href="#">BTC-STEEM</a>
+          </div>
+        </li>
+      </ul>
+      <form class="form-inline my-2 my-lg-0">
+        <input class="form-control mr-sm-2" type="text" placeholder="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      </form>
+    </div>
+  </nav>
+  <!-- Order book -->
+  <div class="container mb-5">
+    <!-- <div class="row">
+      <div class="d-flex flex-row">
+        <div class="p-2 mb-3">
+          <h1 class="display-4 text-primary">Bitty Buy</h1>
+        </div>
+      </div>
+      <div class="d-flex flex-row align-items-center text-center mt-2">
+        <div class="p-2 text-success">
+          <h4 class="up"><i class="fa fa-arrow-up"></i></h4>
+        </div>
+        <div class="p-2 text-warning">
+          <h4 class="down"><i class="fa fa-arrow-down"></i></h4>
+        </div>
+        <div class="p-2 text-danger">
+          <h4 class="cancel"><i class="fa fa-times-circle"></i></h4>
+        </div>
+      </div>
+    </div> -->
+    <!-- Line Chart -->
+    <div class="row">
+      <div class="col-md-8  col-xs-12 p-2">
+        <div class="card ">
+          <div class="card-header">
+            <h3>Chart</h3>
+          </div>
+          <div class="card-block">
+            <div id="chartContainer" style="height: 370px; width: 100%;"></div>
+          </div>
+        </div>
+      </div>
+<!-- Coin Stats -->
+      <div class="col-md-4 col-xs-12 p-2">
+        <div class="card ">
+          <div class="card-header">
+            <h3>Coin Stats</h3>
+          </div>
+          <div class="card-block">
+            <div class="flex-wrap">
+              <div class="p-3">
+                <div class="pull-left"><h4><strong>Last</strong></h4></div>
+                <div class="pull-right current-last"><i class="fa fa-btc"></i> 0.00027670</div>
+              </div>
+            </div><br>
+            <div class="flex-wrap">
+              <div class="p-3">
+                <div class="pull-left" ><h4><strong>BID</strong></h4></div>
+                <div class="pull-right current-bid"><i class="fa fa-btc"></i> 0.00000000</div>
+              </div>
+            </div><br>
+            <div class="flex-wrap">
+              <div class="p-3">
+                <div class="pull-left"><h4><strong>ASK</strong></h4></div>
+                <div class="pull-right current-ask"><i class="fa fa-btc"></i> 0.00027670</div>
+              </div>
+            </div><br>
+            <div class="flex-wrap">
+              <div class="p-3">
+                <div class="pull-left"><h4><strong>24H HIGH</strong></h4></div>
+                <div class="pull-right current-high"><i class="fa fa-btc"></i> 0.00029068</div>
+              </div>
+            </div><br>
+            <div class="flex-wrap">
+              <div class="p-3">
+                <div class="pull-left"><h4><strong>24H LOW</strong></h4></div>
+                <div class="pull-right current-low"><i class="fa fa-btc"></i> 0.00025879</div>
+              </div><br>
+            <div class="flex-wrap">
+              <div class="p-3">
+                <div class="pull-left"><h4><strong><i class="fa fa-btc"></i>VOL</strong></h4></div>
+                <div class="pull-right current-volume"><i class="fa fa-btc"></i> 267.2261</div>
+              </div>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+	<div class="row col-md-4" >
+	<select id="orderType">
+    <option value="buylimit" selected>Buy Order</option>
+    <option value="selllimit">Sell Order</option>
+     </select>
+		
+		</div>
+    <!-- Order Book -->
+    <div class="row mt-3">
+      
+      <div class="d-flex flex-row align-items-center text-center mt-2">
+        <div class="p-2 text-success" style="cursor: pointer">
+          <h4 class="up" ><i class="fa fa-arrow-up fa-2x"></i></h4>
+        </div>
+        <div class="p-2 text-warning" style="cursor: pointer">
+          <h4 class="down"><i class="fa fa-arrow-down fa-2x"></i></h4>
+        </div>
+        <div class="p-2 text-danger" style="cursor: pointer">
+          <h4 class="cancel"><i class="fa fa-times-circle fa-2x"></i></h4>
+        </div>
+        <div class="p-5 text-danger" style="cursor: pointer">
+          <div class="input-group spinner row col-md-8" style="height:40px">
+    <input type="text" id="numSatoshis" class="form-control" value="1" min="1000" max="45">
+    <div class="input-group-btn-vertical">
+      <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
+      <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
+	  <label>Satoshis</label>
+    </div>
+	
+  </div>
+        </div>
+        </div>
+		
+    </div>
+	
+	  <br> 
+ 
+    <div class="row">
+      <div class="col-md-6">
+        <h5 class="text-muted">Bids</h5>
+        <table class="table table-striped">
+          <thead class="thead-light">
+            <tr>
+              <th>Sum</th>
+              <th>Total</th>
+              <th>Size</th>
+              <th>Bid</th>
+            </tr>
+          </thead>
+           <tbody class="bids_body">
+            
+          </tbody>
+        </table>
+        <nav>
+          <ul class="pagination justify-content-start">
+            <li class="page-item">
+              <a class="page-link" href="#" tabindex="-1">Previous</a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item">
+              <a class="page-link" href="#">Next</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+      <div class="col-md-6">
+        <h5 class="text-muted">Asks</h5>
+        <table class="table table-striped">
+          <thead class="thead-light">
+            <tr>
+              <th>Ask</th>
+              <th>Size</th>
+              <th>Total</th>
+              <th>Sum</th>
+            </tr>
+          </thead>
+           <tbody class="asks_body">
+            
+          </tbody>
+        </table>
+        <nav>
+          <ul class="pagination justify-content-end">
+            <li class="page-item">
+              <a class="page-link" href="#" tabindex="-1">Previous</a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item">
+              <a class="page-link" href="#">Next</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <br class="mb-5">
+
+  
+
+   <script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+  <script type="bitty.js"></script>
+  <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+<script>
+$("document").ready(function(){
+
+
+
+
+
+$('.spinner .btn:first-of-type').on('click', function() {
+      var btn = $(this);
+      var input = btn.closest('.spinner').find('input');
+      if (input.attr('max') == undefined || parseInt(input.val()) < parseInt(input.attr('max'))) {    
+        input.val(parseInt(input.val(), 10) + 1);
+      } else {
+        btn.next("disabled", true);
+      }
+    });
+    $('.spinner .btn:last-of-type').on('click', function() {
+      var btn = $(this);
+      var input = btn.closest('.spinner').find('input');
+      if (input.attr('min') == undefined || parseInt(input.val()) > parseInt(input.attr('min'))) {    
+        input.val(parseInt(input.val(), 10) - 1);
+      } else {
+        btn.prev("disabled", true);
+      }
+    });
+
+var coin="";
+
+ var socket = io.connect('http://localhost:8080');
+  socket.on('ticker', function (data) {
+     $.each(data, function(key2,val2){
+	
+   $.each(val2, function(key,val){
+ 
+					
+					switch(key){
+					case "Bid":
+					
+					$(".current-bid").html("<i class='fa fa-btc'></i> " + val);
+					break;
+					
+					case "Ask":
+					
+					$(".current-ask").html("<i class='fa fa-btc'></i> " + val);
+					break;
+					
+					case "Last":
+					
+					$(".current-last").html("<i class='fa fa-btc'></i> " + val);
+					break;
+					
+					case "High":
+					
+					$(".current-high").html("<i class='fa fa-btc'></i> " + val);
+					break;
+					
+					case "Low":
+					
+					$(".current-low").html("<i class='fa fa-btc'></i> " + val);
+					break;
+					
+					case "BaseVolume":
+					
+					$(".current-volume").html("<i class='fa fa-btc'></i> " + val);
+					break;
+					
+					}
+					
+					
+					
+				});	
+					
+				});		
+  });
+
+ socket.on('currencies', function (data) {
+
+  $.each(data, function(key,val){
+   $.each(val, function(key2,val2){
+  
+  if(key2=="Currency"){
+   $(".dropdown-menu").append('<a class="dropdown-item" href="#">BTC-'+val2+'</a>');
+  
+  }
+ 
+ });
+ });
+ 
+ $(".dropdown-item").click(function(){
+coin = $(this).text();
+getChart(coin);
+ $(".bids_body").empty();
+ $(".asks_body").empty();
+ 
+ $.ajax({
+				type : "GET",
+				contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+				url : "/subscribe?coin=" + $(this).text(),
+				timeout : 600000,
+				success : function(data) {
+		
+				$.each(data, function(key,val){
+					
+				});					
+							    
+				},
+				error : function(jqXHR,textStatus,errorThrown) {
+					console.log(textStatus,errorThrown);
+				}
+			});
+		
+getBooks($(this).text()); 
+
+
+
+}); 
+$(".cancel").click(function(){
+
+ 
+ $.ajax({
+				type : "GET",
+				contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+				url : "/cancel?coin=" + coin,
+				timeout : 600000,
+				success : function(data) {
+		
+				$.each(data, function(key,val){
+					
+				});					
+							    
+				},
+				error : function(jqXHR,textStatus,errorThrown) {
+					console.log(textStatus,errorThrown);
+				}
+			});
+		
+getBooks(coin); 
+
+
+
+});
+
+});
+
+
+
+
+$(".up").click(function(){
+$.ajax({
+				type : "GET",
+				contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+				url : "/cancel?coin=" + coin,
+				timeout : 600000,
+				success : function(data) {
+		var quantity=0;
+		var limit=0;
+				$.each(data, function(key,val){
+				console.log(data);
+					switch(key){
+					
+					case "Quantity":
+					quantity=val;
+					break;
+					
+					case "Limit":
+					limit=val;
+					break;
+					}
+					});
+					$.ajax({
+				type : "GET",
+				contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+				url : "/up?coin=" + coin + "&quantity=" + round(quantity,0)  + "&limit=" + round(limit + ($("#numSatoshis").val()* 0.00000001), 8) + '&type=' + $( "#orderType option:selected" ).val(),
+				timeout : 600000,
+				success : function(data) {
+		console.log(data);
+				$.each(data, function(key,val){
+					
+				});					
+							    
+				},
+				error : function(jqXHR,textStatus,errorThrown) {
+					console.log(textStatus,errorThrown);
+				}
+			});
+							
+							    
+				},
+				error : function(jqXHR,textStatus,errorThrown) {
+					console.log(textStatus,errorThrown);
+				}
+			});
+		
+getBooks(coin); 
+});
+function round(value, decimals) {
+  return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
+}
+
+$(".down").click(function(){
+$.ajax({
+				type : "GET",
+				contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+				url : "/cancel?coin=" + coin,
+				timeout : 600000,
+				success : function(data) {
+		var quantity=0;
+		var limit=0;
+				$.each(data, function(key,val){
+					switch(key){
+					
+					case "Quantity":
+					quantity=val;
+					break;
+					
+					case "Limit":
+					limit=val;
+					break;
+					}
+					$.ajax({
+				type : "GET",
+				contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+				url : "/down?coin=" + coin + "&quantity=" + quantity  + "&limit=" + round(limit - ($("#numSatoshis").val()* 0.00000001), 8) + '&type=' + $( "#orderType option:selected" ).val(),
+				timeout : 600000,
+				success : function(data) {
+		
+				$.each(data, function(key,val){
+					
+				});					
+							    
+				},
+				error : function(jqXHR,textStatus,errorThrown) {
+					console.log(textStatus,errorThrown);
+				}
+			});
+			
+			
+			
+					
+					
+				});					
+							    
+				},
+				error : function(jqXHR,textStatus,errorThrown) {
+					console.log(textStatus,errorThrown);
+				}
+			});
+		
+getBooks(coin); 
+});
+
+
+
+
+function getBooks(coin){
+
+
+ var bittrex = {
+								"bid": 0,
+								"bidqty": 0,
+								"ask": 0,
+								"askqty": 0
+								};
+
+$.ajax({
+				type : "GET",
+				contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+				url : "/books?coin=" + coin,
+				timeout : 600000,
+				success : function(data) {
+				
+				$(".asks_body").empty();
+				$(".bids_body").empty();
+		
+						 $.each(data, function(key,val){
+							if(key=="result")
+							{
+							var x=0;
+							
+							 $.each(val, function(key2,val2){
+							var y=0;
+							x++;
+							 $.each(val2, function(key3,val3){
+							 y++;
+							   var quantity="";
+							 var rate="";
+							  $.each(val3, function(key4,val4){
+							
+							  switch(key4){
+							  case "Quantity":
+							  quantity=val4;
+							  break;
+							   case "Rate":
+							  rate=val4;
+							  break;
+							  
+							  }
+							  
+							  });
+							 
+							  if(x>1){
+							  
+							  if(y <11){
+							  
+							   
+							 $(".asks_body").append("<tr><td>" + rate + "</td><td>" + quantity + "</td><td>0.0000</td><td>0.0000</td></tr>");
+							 if(y<2){
+							bittrex.ask=rate;
+							bittrex.askqty=quantity;
+							
+							 }
+							 }
+							 
+							 
+							 }
+							 else{
+							 if(y <11){
+							 $(".bids_body").append("<tr><td>0.0000</td><td>0.0000</td><td>" + quantity + "</td><td>" + rate + "</td></tr>");
+							 if(y<2){
+							bittrex.bid=rate;
+							bittrex.bidqty=quantity;
+							
+							 }
+							 }
+							 }
+							 
+							 });
+							 
+							 
+							  });
+							  
+							  
+							 
+							}
+							
+						    });
+							
+				console.log("Bittrex:  "+JSON.stringify(bittrex));
+							  
+							  
+							  $.ajax({
+				type : "GET",
+				contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+				url : "/polo?coin=" + coin,
+				timeout : 600000,
+				success : function(poloniex) {
+				
+		        console.log("Poloniex:  "+ JSON.stringify(poloniex))
+				
+				 console.log("red");
+						 
+						 if(poloniex.bid > bittrex.ask){
+						 console.log("yellow");
+						 }
+						else if(poloniex.ask < bittrex.bid){
+						 console.log("yellow");
+						 }
+						 else if(poloniex.bid > bittrex.ask + (bittrex.ask *.0025)){
+						var howMany=0;
+						
+						if(poloniex.bidqty < bittrex.askqty)
+						{
+						 howMany=poloniex.bidqty;
+						}
+						else{
+						
+						howMany= bittrex.askqty;
+						
+						}
+						if(howMany>50){howMany=50;}
+						
+						if(howMany*bittrex.ask> 0.00050000){
+						console.log("green");
+						console.log("sell on Polo, buy on Bittrex howmany??:" + howMany);
+						buySellPolo("sell", coin, poloniex.bid, howMany)
+						buySellBittrex("buylimit", coin, bittrex.ask, howMany)
+						}
+						
+						
+						}
+						else if(poloniex.ask < bittrex.bid  - (bittrex.bid *.0025)){
+						var howMany=0;
+						
+						if(bittrex.bidqty < poloniex.askqty)
+						{
+						 howMany=bittrex.bidqty;
+						}
+						else{
+						
+						howMany= poloniex.askqty;
+						}
+						if(howMany>50){howMany=50;}
+						
+						if(howMany*bittrex.bid> 0.00050000){
+						
+						 console.log("buy on Polo, sell on Bittrex");
+						 buySellPolo("buy", coin, poloniex.ask, howMany);
+						 buySellBittrex("selllimit", coin, bittrex.bid, howMany);
+						}
+						 
+						 }
+						
+
+						
+				},
+				error : function(jqXHR,textStatus,errorThrown) {
+					console.log(textStatus,errorThrown);
+				}
+			});
+							    
+				},
+				error : function(jqXHR,textStatus,errorThrown) {
+					console.log(textStatus,errorThrown);
+				}
+			});
+
+setTimeout(function(){ 
+
+getBooks(coin);
+}, 2000);
+
+
+}
+
+function buySellPolo(command, coin, rate, amount){
+
+$.ajax({
+				type : "GET",
+				contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+				url : "/polo/"+command+"?coin=" + coin+"&rate="+rate+"&amount="+amount,
+				timeout : 600000,
+				success : function(response) {
+				
+		        console.log("Poloniex Response:  "+ response)
+						 
+				},
+				error : function(jqXHR,textStatus,errorThrown) {
+					console.log(textStatus,errorThrown);
+				}
+			});
+getChart(coin);
+}
+
+function buySellBittrex(type,coin,rate,amount){
+		
+				
+					
+					$.ajax({
+				type : "GET",
+				contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+				url : "/trade?coin=" + coin + "&quantity=" + amount  + "&limit=" + round(rate, 8) + '&type=' + type,
+				timeout : 600000,
+				success : function(response) {
+		
+				 console.log("Bittrex Response:  "+ response)
+							    
+				},
+				error : function(jqXHR,textStatus,errorThrown) {
+					console.log(textStatus,errorThrown);
+				}
+			});
+			
+			
+			
+					
+					
+								
+getChart(coin);
+}
+
+
+
+//chart
+var dataPoints = [];
+var chart;
+function getChart(coin){
+
+var fixedcoin = coin.replace("-","_");
+chart = new CanvasJS.Chart("chartContainer", {
+	animationEnabled: true,
+	theme: "light2", // "light1", "light2", "dark1", "dark2"
+	exportEnabled: true,
+	title: {
+		text: ""
+	},
+	subtitles: [{
+		text: ""
+	}],
+	axisX: {
+		interval: 1,
+		valueFormatString: "D"
+	},
+	axisY: {
+		includeZero: false,
+		prefix: "$",
+		title: "Price"
+	},
+	toolTip: {
+		content: "Date: {x}<br /><strong>Price:</strong><br />Open: {y[0]}, Close: {y[3]}<br />High: {y[1]}, Low: {y[2]}"
+	},
+	data: [{
+		type: "candlestick",
+		yValueFormatString: "$##0.00",
+		dataPoints: dataPoints
+	}]
+});
+ var milliseconds = (new Date()).getTime();
+ var chartDataURL = "https://poloniex.com/public?command=returnChartData&currencyPair=" + fixedcoin + "&start=" + (milliseconds / 10 - 14400) +"&end=9999999999&period=1800";
+
+	$.ajax({
+				type : "GET",
+				contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+				url : chartDataURL,
+				timeout : 600000,
+				success : function(data) {
+		
+				getDataPoints(data) ;
+							    
+				},
+				error : function(jqXHR,textStatus,errorThrown) {
+					console.log(textStatus,errorThrown);
+				}
+			});
+			
+}
+
+function getDataPoints(data) {
+	
+	
+			$.each(data, function(key2,val2){
+			var candleDate = 0;
+			var candleHigh = 0;
+			var candleLow = 0;
+			var candleOpen = 0;
+			var candleClose = 0;
+			$.each(val2, function(key,val){
+			
+			switch(key)
+			{
+			case "date":
+			candleDate=val;
+			break;
+			
+			case "high":
+			candleHigh=val;
+			break;
+			
+			case "low":
+			candleLow=val;
+			break;
+			
+			case "open":
+			candleOpen=val;
+			break;
+			
+			case "close":
+			candleClose=val;
+			break;
+			
+			
+			}
+			
+			dataPoints.push({
+				x: new Date(candleDate),
+				y: [
+					parseFloat(candleOpen),
+					parseFloat(candleHigh),
+					parseFloat(candleLow),
+					parseFloat(candleClose)
+				]
+			});
+			
+			
+			});
+			});
+			
+			
+	
+	chart.render();
+}
+
+
+
+});
+
+</script>
+
+</body>
+
+</html>

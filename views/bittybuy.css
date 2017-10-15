@@ -1,0 +1,22 @@
+body {
+  padding-top: 80px;
+  font-family: 'Open Sans', sans-serif;
+}
+.up {
+  cursor: pointer;
+}
+.down {
+  cursor: pointer;
+}
+.up:hover {
+  color: #006600;
+}
+.down:hover {
+  color: #C27415;
+}
+.cancel {
+  cursor: pointer;
+}
+.cancel:hover {
+  color: #7e2c2c;
+}
